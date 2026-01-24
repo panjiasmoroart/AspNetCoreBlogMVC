@@ -41,7 +41,18 @@ namespace AspNetCoreBlogMVC.Controllers
 			blogDbContext.Tags.Add(tag);
 			blogDbContext.SaveChanges();
 
-			return View("Add");
+			//return View("Add");
+			return RedirectToAction("List");
+		}
+
+		[HttpGet]
+		[ActionName("List")]
+		public IActionResult List()
+		{
+			// use dbContext to read the tags
+			var tags = blogDbContext.Tags.ToList();
+
+			return View(tags);
 		}
 	}
 }
