@@ -1,10 +1,18 @@
-﻿using AspNetCoreBlogMVC.Models.ViewModels;
+﻿using AspNetCoreBlogMVC.Data;
+using AspNetCoreBlogMVC.Models.Domain;
+using AspNetCoreBlogMVC.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreBlogMVC.Controllers
 {
     public class AdminTagsController : Controller
     {
+		private readonly BlogDbContext blogDbContext;
+		public AdminTagsController(BlogDbContext blogDbContext)
+		{
+			this.blogDbContext = blogDbContext;
+		}
+
 		[HttpGet]
 		public IActionResult Add()
         {
@@ -20,8 +28,18 @@ namespace AspNetCoreBlogMVC.Controllers
 			// var name = Request.Form["name"];
 			// var displayName = Request.Form["displayName"];
 
-			var name = addTagRequest.Name;
-			var displayName = addTagRequest.DisplayName;
+			// var name = addTagRequest.Name;
+			// var displayName = addTagRequest.DisplayName;
+
+			// mapping AddTagRequest to Tag domain model 
+			var tag = new Tag
+			{
+				Name = addTagRequest.Name,
+				DisplayName = addTagRequest.DisplayName
+			};
+
+			blogDbContext.Tags.Add(tag);
+			blogDbContext.SaveChanges();
 
 			return View("Add");
 		}
