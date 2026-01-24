@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreBlogMVC.Controllers
 {
-    public class AdminTagsController : Controller
-    {
+	public class AdminTagsController : Controller
+	{
 		private readonly BlogDbContext blogDbContext;
 		public AdminTagsController(BlogDbContext blogDbContext)
 		{
@@ -15,11 +15,11 @@ namespace AspNetCoreBlogMVC.Controllers
 
 		[HttpGet]
 		public IActionResult Add()
-        {
-            return View();
-        }
+		{
+			return View();
+		}
 
-		
+
 		[HttpPost]
 		[ActionName("Add")]
 		public IActionResult SubmitTag(AddTagRequest addTagRequest)
@@ -54,5 +54,58 @@ namespace AspNetCoreBlogMVC.Controllers
 
 			return View(tags);
 		}
+
+		[HttpGet]
+		public IActionResult Edit(Guid id)
+		{
+			// 1st method 
+			// var tag = blogDbContext.Tags.Find(id); 
+
+			// 2nd method 
+			var tag = blogDbContext.Tags.FirstOrDefault(x => x.Id == id);
+
+			if (tag != null)
+			{
+				var editTagRequest = new EditTagRequest
+				{
+					Id = tag.Id,
+					Name = tag.Name,
+					DisplayName = tag.DisplayName
+				};
+
+				return View(editTagRequest);
+			}
+
+			return View(null);
+		}
+
+		[HttpPost]
+		public IActionResult Edit(EditTagRequest editTagRequest)
+		{
+			var tag = new Tag
+			{
+				Id = editTagRequest.Id,
+				Name = editTagRequest.Name,
+				DisplayName = editTagRequest.DisplayName
+			};
+
+			var existingTag = blogDbContext.Tags.Find(tag.Id);
+
+			if (existingTag != null)
+			{
+				existingTag.Name = tag.Name;
+				existingTag.DisplayName = tag.DisplayName;
+
+				// save changes 
+				blogDbContext.SaveChanges();
+
+				// show success notification 
+				return RedirectToAction("Edit", new { id = editTagRequest.Id });
+			}
+
+			// show failure notification
+			return RedirectToAction("Edit", new { id = editTagRequest.Id });
+		}
+
 	}
 }
