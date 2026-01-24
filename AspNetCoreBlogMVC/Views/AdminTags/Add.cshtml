@@ -1,6 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model AspNetCoreBlogMVC.Models.ViewModels.AddTagRequest
 @{
 }
 
@@ -14,13 +12,16 @@
     <form method="post">
         <div class="mb-3">
             <label class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" required />
+            @* data binding  *@
+            @* <input type="text" class="form-control" id="name" name="name" /> *@
+            <input type="text" class="form-control" id="name" asp-for="Name" />
             <span class="text-danger" ></span>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Display Name</label>
-            <input type="text" class="form-control" id="displayName"  required />
+            @* <input type="text" class="form-control" id="displayName" name="displayName" /> *@
+            <input type="text" class="form-control" id="displayName" asp-for="DisplayName" required />
             <span class="text-danger" ></span>
         </div>
 
