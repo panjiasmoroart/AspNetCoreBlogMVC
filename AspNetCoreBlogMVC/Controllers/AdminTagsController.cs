@@ -1,6 +1,7 @@
 ﻿using AspNetCoreBlogMVC.Data;
 using AspNetCoreBlogMVC.Models.Domain;
 using AspNetCoreBlogMVC.Models.ViewModels;
+using Azure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreBlogMVC.Controllers
@@ -106,6 +107,25 @@ namespace AspNetCoreBlogMVC.Controllers
 			// show failure notification
 			return RedirectToAction("Edit", new { id = editTagRequest.Id });
 		}
+
+		[HttpPost]
+		public IActionResult Delete(EditTagRequest editTagRequest)
+		{
+			var tag = blogDbContext.Tags.Find(editTagRequest.Id);
+
+			if (tag != null)
+			{
+				blogDbContext.Tags.Remove(tag);
+				blogDbContext.SaveChanges();
+		
+				// show a success notification 
+				return RedirectToAction("List");
+			}
+			
+			// show an error notification
+			return RedirectToAction("Edit", new { id = editTagRequest.Id });
+		}
+
 
 	}
 }
