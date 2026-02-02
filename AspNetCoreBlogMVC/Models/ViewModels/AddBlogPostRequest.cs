@@ -18,7 +18,7 @@ namespace AspNetCoreBlogMVC.Models.ViewModels
 		public IEnumerable<SelectListItem> Tags { get; set; }
 		// Collect Tag  
 		// multiple select
-		//public string[] SelectedTags { get; set; } = Array.Empty<string>();
-		public string SelectedTags { get; set; } 
+		public string[] SelectedTags { get; set; } = Array.Empty<string>();
+		//public string SelectedTags { get; set; } 
 	}
 }

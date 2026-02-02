@@ -1,4 +1,5 @@
-﻿using AspNetCoreBlogMVC.Models.ViewModels;
+﻿using AspNetCoreBlogMVC.Models.Domain;
+using AspNetCoreBlogMVC.Models.ViewModels;
 using AspNetCoreBlogMVC.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,11 +9,13 @@ namespace AspNetCoreBlogMVC.Controllers
     public class AdminBlogPostsController : Controller
     {
         private readonly ITagRepository tagRepository;
+		private readonly IBlogPostRepository blogPostRepository;
 
-        public AdminBlogPostsController(ITagRepository tagRepository)
+		public AdminBlogPostsController(ITagRepository tagRepository, IBlogPostRepository blogPostRepository)
         {
             this.tagRepository = tagRepository;
-        }
+            this.blogPostRepository = blogPostRepository;
+		}
 
         [HttpGet]
         public async Task<IActionResult> Add()
@@ -31,7 +34,39 @@ namespace AspNetCoreBlogMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddBlogPostRequest addBlogPostRequest)
         {
-            return RedirectToAction("Add");
+            // Map view model to domain model
+            var blogPost = new BlogPost
+            {
+                Heading = addBlogPostRequest.Heading,
+                PageTitle = addBlogPostRequest.PageTitle,
+                Content = addBlogPostRequest.Content,
+                ShortDescription = addBlogPostRequest.ShortDescription,
+                FeaturedImageUrl = addBlogPostRequest.FeaturedImageUrl,
+                UrlHandle = addBlogPostRequest.UrlHandle,
+                PublishedDate = addBlogPostRequest.PublishedDate,
+                Author = addBlogPostRequest.Author,
+                Visible = addBlogPostRequest.Visible,
+            };
+
+			// Map Tags from selected tags
+            var selectedTags = new List<Tag>();
+            foreach (var selectedTagId in addBlogPostRequest.SelectedTags)
+            {
+                var selectedTagIdAsGuid = Guid.Parse(selectedTagId);
+                var existingTag = await tagRepository.GetAsync(selectedTagIdAsGuid);
+
+                if (existingTag != null)
+                {
+                    selectedTags.Add(existingTag);
+				}
+			}
+
+			// Mapping tags back to domain model
+            blogPost.Tags = selectedTags;
+
+            await blogPostRepository.AddAsync(blogPost);
+
+			return RedirectToAction("Add");
         }
 
     }
