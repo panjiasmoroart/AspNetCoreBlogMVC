@@ -1,5 +1,6 @@
 ﻿using AspNetCoreBlogMVC.Data;
 using AspNetCoreBlogMVC.Models.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreBlogMVC.Repositories
 {
@@ -24,10 +25,10 @@ namespace AspNetCoreBlogMVC.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<BlogPost>> GetAllAsync()
+        public async Task<IEnumerable<BlogPost>> GetAllAsync()
         {
-            throw new NotImplementedException();
-        }
+            return await blogDbContext.BlogPosts.Include(x => x.Tags).ToListAsync();
+		}
 
         public Task<BlogPost?> GetAsync(Guid id)
         {

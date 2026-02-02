@@ -69,5 +69,14 @@ namespace AspNetCoreBlogMVC.Controllers
 			return RedirectToAction("Add");
         }
 
-    }
+        [HttpGet]
+        public async Task<IActionResult> List()
+        {
+            // call the repository 
+            var blogPosts = await blogPostRepository.GetAllAsync();
+
+			return View(blogPosts);
+		}
+
+	}
 }
