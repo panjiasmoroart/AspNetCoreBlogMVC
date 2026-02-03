@@ -40,9 +40,30 @@ namespace AspNetCoreBlogMVC.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<BlogPost?> UpdateAsync(BlogPost blogPost)
+        public async Task<BlogPost?> UpdateAsync(BlogPost blogPost)
         {
-            throw new NotImplementedException();
-        }
+			var existingBlog = await blogDbContext.BlogPosts.Include(x => x.Tags)
+				.FirstOrDefaultAsync(x => x.Id == blogPost.Id);
+
+			if (existingBlog != null)
+			{
+				existingBlog.Id = blogPost.Id;
+				existingBlog.Heading = blogPost.Heading;
+				existingBlog.PageTitle = blogPost.PageTitle;
+				existingBlog.Content = blogPost.Content;
+				existingBlog.ShortDescription = blogPost.ShortDescription;
+				existingBlog.Author = blogPost.Author;
+				existingBlog.FeaturedImageUrl = blogPost.FeaturedImageUrl;
+				existingBlog.UrlHandle = blogPost.UrlHandle;
+				existingBlog.Visible = blogPost.Visible;
+				existingBlog.PublishedDate = blogPost.PublishedDate;
+				existingBlog.Tags = blogPost.Tags;
+
+				await blogDbContext.SaveChangesAsync();
+				return existingBlog;
+			}
+
+            return null;
+		}
     }
 }
