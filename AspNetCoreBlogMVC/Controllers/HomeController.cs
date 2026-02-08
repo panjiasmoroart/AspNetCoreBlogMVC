@@ -1,14 +1,29 @@
 using System.Diagnostics;
 using AspNetCoreBlogMVC.Models;
+using AspNetCoreBlogMVC.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreBlogMVC.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ILogger<HomeController> _logger;
+		private readonly IBlogPostRepository blogPostRepository;
+
+		public HomeController(ILogger<HomeController> logger,
+            IBlogPostRepository blogPostRepository    
+        )
         {
-            return View();
+            _logger = logger;
+			this.blogPostRepository = blogPostRepository;
+		}
+
+        public async Task<IActionResult> Index()
+        {
+			// getting all blogs
+			var blogPosts = await blogPostRepository.GetAllAsync();
+
+			return View(blogPosts);
         }
 
         public IActionResult Privacy()
