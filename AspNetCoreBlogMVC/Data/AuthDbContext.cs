@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace AspNetCoreBlogMVC.Data
 {
@@ -9,6 +10,12 @@ namespace AspNetCoreBlogMVC.Data
 		public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
 		{
         }
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			optionsBuilder.ConfigureWarnings(warnings =>
+				warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
+		}
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
