@@ -3,11 +3,13 @@ using AspNetCoreBlogMVC.Models.Domain;
 using AspNetCoreBlogMVC.Models.ViewModels;
 using AspNetCoreBlogMVC.Repositories;
 using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreBlogMVC.Controllers
 {
+	[Authorize(Roles = "Admin")]
 	public class AdminTagsController : Controller
 	{
 		//private readonly BlogDbContext blogDbContext;
