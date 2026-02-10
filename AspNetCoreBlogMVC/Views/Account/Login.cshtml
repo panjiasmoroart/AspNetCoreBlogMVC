@@ -54,7 +54,8 @@
                     <button type="submit" class="btn btn-dark">Login</button>
                 </div>
 
-                @* <input type="text" asp-for="ReturnUrl" /> *@
+                @* Adding ReturnUrl After Authorization *@ 
+                <input type="hidden" asp-for="ReturnUrl" />
             </form>
         </div>
     </div>
