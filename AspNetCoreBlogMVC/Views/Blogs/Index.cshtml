@@ -1,4 +1,4 @@
-﻿@model AspNetCoreBlogMVC.Models.Domain.BlogPost
+﻿@model AspNetCoreBlogMVC.Models.ViewModels.BlogDetailsViewModel
 
 @{
     ViewData["Title"] = Model.PageTitle;
@@ -21,11 +21,11 @@
                         <i class="bi bi-hand-thumbs-up-fill"></i>
                     </a>
 
-                    @* <a id="btnLike" style="cursor: pointer;">
+                    <a id="btnLike" style="cursor: pointer;">
                         <i class="bi bi-hand-thumbs-up"></i>
-                    </a> *@
+                    </a>
 
-                    <span id="totalLikes">0</span> likes
+                    <span id="totalLikes">@Model.TotalLikes</span> likes
                 </div>
 
                 <div class="mb-3 d-flex">
