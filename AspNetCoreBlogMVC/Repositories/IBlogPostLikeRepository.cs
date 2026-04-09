@@ -1,7 +1,11 @@
-﻿namespace AspNetCoreBlogMVC.Repositories
+﻿using AspNetCoreBlogMVC.Models.Domain;
+
+namespace AspNetCoreBlogMVC.Repositories
 {
 	public interface IBlogPostLikeRepository
 	{
 		Task<int> GetTotalLikes(Guid blogPostId);
+
+		Task<BlogPostLike> AddLikeForBlog(BlogPostLike blogPostLike);
 	}
 }

@@ -1,6 +1,7 @@
 ﻿
 
 using AspNetCoreBlogMVC.Data;
+using AspNetCoreBlogMVC.Models.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreBlogMVC.Repositories
@@ -12,6 +13,13 @@ namespace AspNetCoreBlogMVC.Repositories
 		public BlogPostLikeRepository(BlogDbContext blogDbContext)
 		{
 			this.blogDbContext = blogDbContext;
+		}
+
+		public async Task<BlogPostLike> AddLikeForBlog(BlogPostLike blogPostLike)
+		{
+			await blogDbContext.BlogPostLike.AddAsync(blogPostLike);
+			await blogDbContext.SaveChangesAsync();
+			return blogPostLike;
 		}
 
 		public async Task<int> GetTotalLikes(Guid blogPostId)
