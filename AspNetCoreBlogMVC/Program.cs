@@ -29,12 +29,13 @@ builder.Services.Configure<IdentityOptions>(options =>
 	options.Password.RequiredUniqueChars = 1;
 });
 
-//Dependency Injection(DI)
+// Dependency Injection(DI)
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 builder.Services.AddScoped<IImageRespository, CloudinaryImageRepository>();
 builder.Services.AddScoped<IBlogPostLikeRepository, BlogPostLikeRepository>();
 builder.Services.AddScoped<IBlogPostCommentRepository, BlogPostCommentRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
