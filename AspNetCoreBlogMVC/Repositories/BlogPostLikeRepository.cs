@@ -22,6 +22,11 @@ namespace AspNetCoreBlogMVC.Repositories
 			return blogPostLike;
 		}
 
+		public async Task<IEnumerable<BlogPostLike>> GetLikesForBlog(Guid blogPostId)
+		{
+			return await blogDbContext.BlogPostLike.Where(x => x.BlogPostId == blogPostId).ToListAsync();
+		}
+
 		public async Task<int> GetTotalLikes(Guid blogPostId)
 		{
 			return await blogDbContext.BlogPostLike.CountAsync(x => x.BlogPostId == blogPostId);
