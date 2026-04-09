@@ -1,5 +1,6 @@
 ﻿using AspNetCoreBlogMVC.Data;
 using AspNetCoreBlogMVC.Models.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreBlogMVC.Repositories
 {
@@ -16,6 +17,11 @@ namespace AspNetCoreBlogMVC.Repositories
 			await blogDbContext.BlogPostComment.AddAsync(blogPostComment);
 			await blogDbContext.SaveChangesAsync();
 			return blogPostComment;
+		}
+
+		public async Task<IEnumerable<BlogPostComment>> GetCommentsByBlogIdAsync(Guid blogPostId)
+		{
+			return await blogDbContext.BlogPostComment.Where(x => x.BlogPostId == blogPostId).ToListAsync();
 		}
 	}
 }
