@@ -1,4 +1,5 @@
-﻿using AspNetCoreBlogMVC.Models.ViewModels;
+﻿using AspNetCoreBlogMVC.Models.Domain;
+using AspNetCoreBlogMVC.Models.ViewModels;
 using AspNetCoreBlogMVC.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,16 +12,19 @@ namespace AspNetCoreBlogMVC.Controllers
         private readonly IBlogPostLikeRepository blogPostLikeRepository;
 		private readonly SignInManager<IdentityUser> signInManager;
 		private readonly UserManager<IdentityUser> userManager;
+		private readonly IBlogPostCommentRepository blogPostCommentRepository;
 
 		public BlogsController(IBlogPostRepository blogPostRepository, 
 			IBlogPostLikeRepository blogPostLikeRepository,
 			SignInManager<IdentityUser> signInManager,
-			UserManager<IdentityUser> userManager)
+			UserManager<IdentityUser> userManager,
+			IBlogPostCommentRepository blogPostCommentRepository)
         {
             this.blogPostRepository = blogPostRepository;
             this.blogPostLikeRepository = blogPostLikeRepository;
 			this.signInManager = signInManager;
 			this.userManager = userManager;
+			this.blogPostCommentRepository = blogPostCommentRepository;
 		}
 
 		[HttpGet]
@@ -72,5 +76,26 @@ namespace AspNetCoreBlogMVC.Controllers
 
 			return View(blogDetailsViewModel);
         }
-    }
+
+		[HttpPost]
+		public async Task<IActionResult> Index(BlogDetailsViewModel blogDetailsViewModel)
+		{
+			if (signInManager.IsSignedIn(User))
+			{
+				var domainModel = new BlogPostComment
+				{
+					BlogPostId = blogDetailsViewModel.Id,
+					Description = blogDetailsViewModel.CommentDescription,
+					UserId = Guid.Parse(userManager.GetUserId(User)),
+					DateAdded = DateTime.Now
+				};
+
+				await blogPostCommentRepository.AddAsync(domainModel);
+				return RedirectToAction("Index", "Blogs",
+				  new { urlHandle = blogDetailsViewModel.UrlHandle });
+			}
+
+			return View();
+		}
+	}
 }
