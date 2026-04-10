@@ -4,6 +4,7 @@ namespace AspNetCoreBlogMVC.Models.ViewModels
 {
     public class RegisterViewModel
     {
+		// Server Side Validation
 		[Required]
 		public string Username { get; set; }
 

@@ -26,6 +26,7 @@ namespace AspNetCoreBlogMVC.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
 		{
+			// Server Side Validation 
 			if (ModelState.IsValid)
 			{
 				var identityUser = new IdentityUser
