@@ -16,8 +16,9 @@ namespace AspNetCoreBlogMVC.Repositories
 		public async Task<IEnumerable<Tag>> GetAllAsync(
 			string? searchQuery,
 			string? sortBy,
-			string? sortDirection
-		)
+			string? sortDirection,
+			int pageSize = 100,
+			int pageNumber = 1)
 		{
 			var query = blogDbContext.Tags.AsQueryable();
 
@@ -45,7 +46,10 @@ namespace AspNetCoreBlogMVC.Repositories
 			}
 
 			// Pagination
-
+			// Skip 0 Take 5 -> Page 1 of 5 results
+			// Skip 5 Take next 5 -> Page 2 of 5 results
+			var skipResults = (pageNumber - 1)	* pageSize;
+			query = query.Skip(skipResults).Take(pageSize);
 
 			return await query.ToListAsync();
 
@@ -93,9 +97,9 @@ namespace AspNetCoreBlogMVC.Repositories
 
 			return null;
 		}
-		public Task<int> CountAsync()
+		public async Task<int> CountAsync()
 		{
-			throw new NotImplementedException();
+			return await blogDbContext.Tags.CountAsync();
 		}
 	}
 }

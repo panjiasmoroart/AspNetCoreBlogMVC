@@ -7,7 +7,9 @@ namespace AspNetCoreBlogMVC.Repositories
         Task<IEnumerable<Tag>> GetAllAsync(
 			string? searchQuery = null,
 			string? sortBy = null,
-			string? sortDirection = null);
+			string? sortDirection = null,
+			int pageSize = 100,
+			int pageNumber = 1);
 		Task<Tag?> GetAsync(Guid id);
 
 		Task<Tag> AddAsync(Tag tag);
