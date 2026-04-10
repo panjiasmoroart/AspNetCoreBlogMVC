@@ -66,6 +66,7 @@ namespace AspNetCoreBlogMVC.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Login(LoginViewModel loginViewModel)
 		{
+			// Server Side Validation 
 			if (!ModelState.IsValid)
 			{
 				return View();
