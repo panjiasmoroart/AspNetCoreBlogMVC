@@ -13,9 +13,22 @@ namespace AspNetCoreBlogMVC.Repositories
         {
             this.blogDbContext = blogDbContext;
 		}
-		public async Task<IEnumerable<Tag>> GetAllAsync()
+		public async Task<IEnumerable<Tag>> GetAllAsync(
+			string? searchQuery
+		)
 		{
-			return await blogDbContext.Tags.ToListAsync();
+			var query = blogDbContext.Tags.AsQueryable();
+
+			// Filtering
+			if (string.IsNullOrWhiteSpace(searchQuery) == false)
+			{
+				query = query.Where(x => x.Name.Contains(searchQuery) ||
+										 x.DisplayName.Contains(searchQuery));
+			}
+
+			return await query.ToListAsync();
+
+			//return await blogDbContext.Tags.ToListAsync();
 		}
 
 		public async Task<Tag> AddAsync(Tag tag)

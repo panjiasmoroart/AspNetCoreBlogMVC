@@ -90,10 +90,14 @@ namespace AspNetCoreBlogMVC.Controllers
 
 		//	return View(tags);
 		//}
-		public async Task<IActionResult> List()
+		public async Task<IActionResult> List(
+			string? searchQuery)
 		{
+			// buat di value input html, agar ketika kita melakukan pencarian input teks tidak hilang pada form input
+			ViewBag.SearchQuery = searchQuery;
+
 			//var tags = await blogDbContext.Tags.ToListAsync();
-			var tags = await tagRepository.GetAllAsync();
+			var tags = await tagRepository.GetAllAsync(searchQuery);
 
 			return View(tags);
 		}
