@@ -57,6 +57,8 @@ namespace AspNetCoreBlogMVC.Controllers
 		//}
 		public async Task<IActionResult> Add(AddTagRequest addTagRequest)
 		{
+			ValidateAddTagRequest(addTagRequest);
+
 			// validation server
 			if (ModelState.IsValid == false)
 			{
@@ -247,6 +249,18 @@ namespace AspNetCoreBlogMVC.Controllers
 			return RedirectToAction("Edit", new { id = editTagRequest.Id });
 		}
 
+		// custom validation
+		private void ValidateAddTagRequest(AddTagRequest request)
+		{
+			if (request.Name is not null && request.DisplayName is not null)
+			{
+				// jika name and displayname sama
+				if (request.Name == request.DisplayName)
+				{
+					ModelState.AddModelError("DisplayName", "Name cannot be the same as DisplayName");
+				}
+			}
+		}
 
 	}
 }
