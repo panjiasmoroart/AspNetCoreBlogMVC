@@ -1,4 +1,5 @@
-﻿using AspNetCoreBlogMVC.Data;
+﻿using System.Globalization;
+using AspNetCoreBlogMVC.Data;
 using AspNetCoreBlogMVC.Models.Domain;
 using AspNetCoreBlogMVC.Models.ViewModels;
 using AspNetCoreBlogMVC.Repositories;
@@ -91,13 +92,17 @@ namespace AspNetCoreBlogMVC.Controllers
 		//	return View(tags);
 		//}
 		public async Task<IActionResult> List(
-			string? searchQuery)
+			string? searchQuery,
+			string? sortBy,
+			string? sortDirection)
 		{
 			// buat di value input html, agar ketika kita melakukan pencarian input teks tidak hilang pada form input
 			ViewBag.SearchQuery = searchQuery;
+			ViewBag.SortBy = sortBy;
+			ViewBag.SortDirection = sortDirection;
 
 			//var tags = await blogDbContext.Tags.ToListAsync();
-			var tags = await tagRepository.GetAllAsync(searchQuery);
+			var tags = await tagRepository.GetAllAsync(searchQuery, sortBy, sortDirection);
 
 			return View(tags);
 		}
