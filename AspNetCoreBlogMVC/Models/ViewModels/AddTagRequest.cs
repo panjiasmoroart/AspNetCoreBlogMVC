@@ -5,6 +5,7 @@ namespace AspNetCoreBlogMVC.Models.ViewModels
 {
     public class AddTagRequest
     {
+        // Server Side Validation
 		[Required]
 		public string Name { get; set; }
 		[Required]

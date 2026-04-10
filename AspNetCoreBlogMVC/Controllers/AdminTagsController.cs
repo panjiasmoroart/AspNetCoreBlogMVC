@@ -57,6 +57,12 @@ namespace AspNetCoreBlogMVC.Controllers
 		//}
 		public async Task<IActionResult> Add(AddTagRequest addTagRequest)
 		{
+			// validation server
+			if (ModelState.IsValid == false)
+			{
+				return View();
+			}
+
 			// Mapping AddTagRequest to Tag domain model
 			var tag = new Tag
 			{
